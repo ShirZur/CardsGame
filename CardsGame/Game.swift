@@ -116,8 +116,8 @@ class Game {
                     winner = "\(westName ?? "Player")"
                     score = westScore
             }else if eastScore > westScore{
-                    winner = "PC"
-                    score = eastScore
+                    winner =  "\(eastName ?? "Player")"
+                score = eastScore
             }else{
                 winner = "\(westName ?? "Player")"
                 score = westScore

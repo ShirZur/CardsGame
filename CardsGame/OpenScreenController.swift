@@ -46,6 +46,15 @@ class OpenScreenController: UIViewController, CLLocationManagerDelegate {
         }
         
         nameTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
+        if let savePlayerSide = UserDefaults.standard.string(forKey: "playerSide"){
+            playerSide = savePlayerSide
+            updateImagesBasedOnPlayerSide()
+        }else{
+            DispatchQueue.global().async {
+                self.checkLocationAuthorization()
+            }
+        }
     }
     
     @objc func textFieldDidChange(_ textField: UITextField){
@@ -113,17 +122,29 @@ class OpenScreenController: UIViewController, CLLocationManagerDelegate {
             
             if userLongitude > referenceLongitude{
                 playerSide = "east"
-                westImage.isHidden = true
+                UserDefaults.standard.set("east", forKey: "playerSide")
+                //westImage.isHidden = true
             
             }else{
                 playerSide = "west"
-                eastImage.isHidden = true
+                //eastImage.isHidden = true
+                UserDefaults.standard.set("west", forKey: "playerSide")
             }
-            
+            updateImagesBasedOnPlayerSide()
             locationManager.stopUpdatingLocation()
         }
     }
     
+    func updateImagesBasedOnPlayerSide(){
+        print("  lalalalalala  \(playerSide)")
+        if playerSide == "east"{
+            westImage.isHidden = true
+            eastImage.isHidden = false
+        }else if playerSide == "west"{
+            eastImage.isHidden = true
+            westImage.isHidden = false
+        }
+    }
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error){
         print("error: \(error.localizedDescription)")
     }
